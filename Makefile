@@ -14,7 +14,7 @@ install: build
 	cp -f $(BUILD_PATH) $(INSTALL_PATH)
 
 build:
-	swift build -c release --disable-sandbox --product $(EXECUTABLE_NAME) --arch arm64 --arch x86_64
+	swift build -c release --disable-sandbox --product $(EXECUTABLE_NAME) --arch x86_64
 
 uninstall:
 	rm -f $(INSTALL_PATH)
