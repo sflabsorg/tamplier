@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "group:.templates/swagger"
+      name = "swagger">
+      <FileRef
+         location = "group:/Users/oboupo/Developer/tamplier/.templates/swagger/Package.swift">
+      </FileRef>
+      <FileRef
+         location = "group:Query.swift">
+      </FileRef>
+      <FileRef
+         location = "group:Model.swift">
+      </FileRef>
+      <FileRef
+         location = "group:Agent.swift">
+      </FileRef>
+      <FileRef
+         location = "group:Server.swift">
+      </FileRef>
+      <FileRef
+         location = "group:README.md">
+      </FileRef>
+   </Group>
+   <FileRef
+      location = "group:.templates/Authentication/Authentication.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "container:">
+   </FileRef>
+</Workspace>
