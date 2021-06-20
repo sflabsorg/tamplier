@@ -5,7 +5,7 @@ prefix ?= /usr/local
 BINDIR ?= $(prefix)/bin
 
 INSTALL_PATH = $(BINDIR)/$(EXECUTABLE_NAME)
-BUILD_PATH = .build/apple/Products/Release/$(EXECUTABLE_NAME)
+BUILD_PATH = .build/release/$(EXECUTABLE_NAME)
 
 .PHONY: install build uninstall
 
