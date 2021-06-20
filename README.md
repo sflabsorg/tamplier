@@ -1,7 +1,7 @@
 SF Labs Tamplier Tool
 =====================
 
-Генератор проектов на основе  **Bootstrap** - **tamplier**.
+Генератор проектов на основе  **Bootstrap** ([iOS](https://github.com/sflabsorg/bootstrap-ios) / [Android](https://github.com/sflabsorg/bootstrap-android)).
 
 
 tamplier
@@ -22,9 +22,9 @@ tamplier
 
     tamplier generate --auth --output ~/Desktop --name AwesomeProject
     
-Генерация Swagger API
+Генерация Swift Package с Swagger API по YML спецификации
 
-    tamplier api --path {path_to_yml} --output ~/Desktop
+    tamplier api --path {path_to_yml_spec_file} --output ~/Desktop/AwesomeProject
 
 
 Разработка
