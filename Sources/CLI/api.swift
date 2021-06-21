@@ -306,8 +306,8 @@ extension API.YML {
             })
             
             queries.sort(by: { (l, r) in
-                guard let _l = l["name"] as? String,
-                      let _r = r["name"] as? String
+                guard let _l = l["lowercased_type"] as? String,
+                      let _r = r["lowercased_type"] as? String
                 else {
                     return false
                 }
