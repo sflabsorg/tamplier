@@ -168,6 +168,12 @@ extension API.YML.Property {
                 } else {
                     return ("String", nil)
                 }
+            case "integer":
+                switch (format ?? "") {
+                case "int64": return ("Int64", nil)
+                case "int32": return ("Int32", nil)
+                default: return ("Int", nil)
+                }
             case "number":
                 if self.enum != nil {
                     print("Enum's for type `number` not supported")
@@ -230,6 +236,12 @@ extension API.YML.Subproperty {
                     return "Data"
                 } else {
                     return "String"
+                }
+            case "integer":
+                switch (format ?? "") {
+                case "int64": return "Int64"
+                case "int32": return "Int32"
+                default: return "Int"
                 }
             case "number": return "Double"
             case "array": return nil
