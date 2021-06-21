@@ -179,7 +179,11 @@ extension API.YML.Property {
                     print("Enum's for type `number` not supported")
                     return (nil, nil)
                 }
-                return ("Double", nil)
+                switch (format ?? "") {
+                case "Double": return ("Double", nil)
+                case "Float": return ("Float", nil)
+                default: return ("Double", nil)
+                }
             case "array":
                 if self.enum != nil {
                     print("Enum's for type `array` not supported")
@@ -243,7 +247,12 @@ extension API.YML.Subproperty {
                 case "int32": return "Int32"
                 default: return "Int"
                 }
-            case "number": return "Double"
+            case "number":
+                switch (format ?? "") {
+                case "Double": return "Double"
+                case "Float": return "Float"
+                default: return "Double"
+                }
             case "array": return nil
             default: return nil
             }
