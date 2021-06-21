@@ -148,7 +148,7 @@ extension API.YML {
         try fileManager.createDirectory(at: outputURL.appendingPathComponent("Sources/Models"), withIntermediateDirectories: true, attributes: nil)
         try components.schemas.forEach({ (name, schema) in
             var enums: [[AnyHashable : Any]] = []
-            let properties = schema.properties.compactMap({ (key, value) -> [AnyHashable : Any]? in
+            var properties = schema.properties.compactMap({ (key, value) -> [String : Any]? in
                 let (_type, _enum) = value.expandedTypeWithSchema(schemaName: name, propertyName: key)
                 guard var type = _type
                 else {
@@ -182,6 +182,15 @@ extension API.YML {
                 return data
             })
             
+            properties.sort(by: { (l, r) in
+                guard let _l = l["name"] as? String,
+                      let _r = r["name"] as? String
+                else {
+                    return false
+                }
+                return _l < _r
+            })
+            
             let data: [AnyHashable : Any] = [
                 "name" : name,
                 "description": schema.description ?? "Description not provided",
@@ -204,10 +213,10 @@ extension API.YML {
         try fileManager.createDirectory(at: outputURL.appendingPathComponent("Sources/Queries"), withIntermediateDirectories: true, attributes: nil)
         try paths.forEach({ (pathSource, pathType) in
             let name = API.YML.Path.escapedName(withPathSource: pathSource)
-            var queries: [[AnyHashable : Any]] = []
+            var queries: [[String : Any]] = []
             
             try pathType.forEach({ (typeName, path) in
-                var query: [AnyHashable : Any] = [
+                var query: [String : Any] = [
                     "uppercased_type" : typeName.uppercased(),
                     "lowercased_type" : typeName.lowercased(),
                     "name" : name,
@@ -263,7 +272,7 @@ extension API.YML {
                     ))
                 })
                 
-                query["parameters"] = parameters.map({ ["name" : $0.0, "type" : $0.1] })
+                query["parameters"] = parameters.map({ ["name" : $0.0, "type" : $0.1] }).sorted(by: { $0["name"]! > $1["name"]! })
                 query["init"] = parameters.map({ "\($0.0): \($0.1)" }).joined(separator: ", ")
                 query["path"] = pathSource.hasPrefix("/") ? String(pathSource.dropFirst()) : pathSource
                 
@@ -289,6 +298,15 @@ extension API.YML {
                 })
                 
                 queries.append(query)
+            })
+            
+            queries.sort(by: { (l, r) in
+                guard let _l = l["name"] as? String,
+                      let _r = r["name"] as? String
+                else {
+                    return false
+                }
+                return _l < _r
             })
             
             let  data: [AnyHashable : Any] = [
