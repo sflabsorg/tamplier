@@ -224,7 +224,8 @@ extension API.YML {
                 ]
                 
                 var parameters: [(String, String)] = []
-                var pathSource = pathSource + "?"
+                var pathSource = pathSource
+                var queryParameters: [String] = []
                 
                 try path.parameters?.forEach({ parameter in
                     let error = RuntimeError.message("Unsupported type of query parameter: \(parameter.name) for \(typeName.uppercaseFirstLetter()) in \(pathSource)")
@@ -237,7 +238,7 @@ extension API.YML {
                     if parameter.in == "path" {
                         pathSource = pathSource.replacingOccurrences(of: "{\(parameter.name)}", with: "\\(\(parameter.name))")
                     } else if parameter.in == "query" {
-                        pathSource = pathSource.appending("\(parameter.name)=\\(QueryParameter(\(parameter.name)))")
+                        queryParameters.append("\(parameter.name)")
                     } else {
                         throw error
                     }
@@ -271,6 +272,10 @@ extension API.YML {
                         _type
                     ))
                 })
+                
+                if queryParameters.count > 0 {
+                    query["gquery"] = queryParameters.map({ [ "name" : $0 ] }).sorted(by: { $0["name"]! > $1["name"]! })
+                }
                 
                 query["parameters"] = parameters.map({ ["name" : $0.0, "type" : $0.1] }).sorted(by: { $0["name"]! > $1["name"]! })
                 query["init"] = parameters.map({ "\($0.0): \($0.1)" }).joined(separator: ", ")
