@@ -193,7 +193,7 @@ extension API.YML.Property {
                 else {
                     return (nil, nil)
                 }
-                return ("[API.\(subtype)]", nil)
+                return ("[\(subtype)]", nil)
             default:
                 return (nil, nil)
             }
@@ -257,7 +257,11 @@ extension API.YML.Subproperty {
             default: return nil
             }
         } else if let _ref = self.ref {
-            return _ref.components(separatedBy: "/").last
+            if let last = _ref.components(separatedBy: "/").last {
+                return "API.\(last)"
+            } else {
+                return nil
+            }
         } else {
             return nil
         }

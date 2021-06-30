@@ -292,7 +292,12 @@ extension API.YML {
                                     else {
                                         throw error
                                     }
-                                    query["response_type"] = "API.\(responseType)"
+                                    let l = "API.\(responseType)"
+                                    query["response_type"] = l
+                                    
+                                    if l == "API.String" {
+                                        print("")
+                                    }
                                 default: throw error
                                 }
                             })
