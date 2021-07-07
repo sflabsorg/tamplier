@@ -155,7 +155,7 @@ extension API.YML {
                     return nil
                 }
                 
-                if !schema.required.contains(key) {
+                if !(schema.required ?? []).contains(key) {
                     type += "?"
                 }
                 

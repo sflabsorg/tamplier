@@ -31,7 +31,7 @@ extension API {
             
             let type: SchemaType
             let description: String?
-            let required: [String]
+            let required: [String]?
             let properties: [String : Property]
         }
         
