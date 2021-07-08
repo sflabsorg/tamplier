@@ -27,12 +27,14 @@ extension API {
             enum SchemaType: String, Codable, MustacheBoxable {
                 
                 case object
+                case string
             }
             
             let type: SchemaType
+            let `enum`: [String]?
             let description: String?
             let required: [String]?
-            let properties: [String : Property]
+            let properties: [String : Property]?
         }
         
         struct Components: Codable, MustacheBoxable {

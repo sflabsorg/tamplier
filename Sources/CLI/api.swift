@@ -147,63 +147,89 @@ extension API.YML {
         
         try fileManager.createDirectory(at: outputURL.appendingPathComponent("Sources/Models"), withIntermediateDirectories: true, attributes: nil)
         try components.schemas.forEach({ (name, schema) in
-            var enums: [[AnyHashable : Any]] = []
-            var properties = schema.properties.compactMap({ (key, value) -> [String : Any]? in
-                let (_type, _enum) = value.expandedTypeWithSchema(schemaName: name, propertyName: key)
-                guard var type = _type
-                else {
-                    return nil
-                }
+            switch schema.type {
+            case .object:
+                var enums: [[AnyHashable : Any]] = []
+                var properties = schema.properties?.compactMap({ (key, value) -> [String : Any]? in
+                    let (_type, _enum) = value.expandedTypeWithSchema(schemaName: name, propertyName: key)
+                    guard var type = _type
+                    else {
+                        return nil
+                    }
+                    
+                    if !(schema.required ?? []).contains(key) {
+                        type += "?"
+                    }
+                    
+                    var data: [String : Any] = [
+                        "name" : key,
+                        "type" : type
+                    ]
+                    
+                    if let eenum = _enum {
+                        enums.append([
+                            "name" : eenum.name,
+                            "type" : "String",
+                            "cases" : eenum.cases.map({ (ccase, description) in
+                                return [
+                                    "name" : ccase,
+                                    "description" : description ?? "Description not provided"
+                                ]
+                            })
+                        ])
+                    } else {
+                        data["description"] = value.description ?? "Description not provided"
+                    }
+                    
+                    return data
+                })
                 
-                if !(schema.required ?? []).contains(key) {
-                    type += "?"
-                }
+                properties?.sort(by: { (l, r) in
+                    guard let _l = l["name"] as? String,
+                          let _r = r["name"] as? String
+                    else {
+                        return false
+                    }
+                    return _l < _r
+                })
                 
-                var data: [String : Any] = [
-                    "name" : key,
-                    "type" : type
+                let data: [AnyHashable : Any] = [
+                    "name" : name,
+                    "description": schema.description ?? "Description not provided",
+                    "properties" : properties ?? [],
+                    "init" : properties?.map({ "\($0["name"]!): \($0["type"]!)" }).joined(separator: ", ") ?? "",
+                    "enums" : enums
                 ]
                 
-                if let eenum = _enum {
-                    enums.append([
-                        "name" : eenum.name,
-                        "type" : "String",
-                        "cases" : eenum.cases.map({ (ccase, description) in
-                            return [
-                                "name" : ccase,
-                                "description" : description ?? "Description not provided"
-                            ]
-                        })
-                    ])
-                } else {
-                    data["description"] = value.description ?? "Description not provided"
+                try render(
+                    templatesURL: templatesURL.appendingPathComponent("Object.swift"),
+                    outputURL: outputURL.appendingPathComponent("Sources/Models/\(name).swift"),
+                    data: data
+                )
+            case .string:
+                guard let cases = schema.enum
+                else {
+                    throw RuntimeError.message("Schema with type 'string' doesn't contain enum. \(schema)")
                 }
                 
-                return data
-            })
-            
-            properties.sort(by: { (l, r) in
-                guard let _l = l["name"] as? String,
-                      let _r = r["name"] as? String
-                else {
-                    return false
-                }
-                return _l < _r
-            })
-            
-            let data: [AnyHashable : Any] = [
-                "name" : name,
-                "description": schema.description ?? "Description not provided",
-                "properties" : properties,
-                "init" : properties.map({ "\($0["name"]!): \($0["type"]!)" }).joined(separator: ", "),
-                "enums" : enums
-            ]
-            
-            try render(
-                templatesURL: templatesURL.appendingPathComponent("Model.swift"),
-                outputURL: outputURL.appendingPathComponent("Sources/Models/\(name).swift"),
-                data: data
-            )
+                let data: [AnyHashable : Any] = [
+                    "name" : name,
+                    "description": schema.description ?? "Description not provided",
+                    "type": "String",
+                    "cases": cases.map({ ccase in
+                        return [
+                            "name" : ccase,
+                            "description": "Description not provided"
+                        ]
+                    })
+                ]
+                
+                try render(
+                    templatesURL: templatesURL.appendingPathComponent("Enum.swift"),
+                    outputURL: outputURL.appendingPathComponent("Sources/Models/\(name).swift"),
+                    data: data
+                )
+            }
         })
         
         //
