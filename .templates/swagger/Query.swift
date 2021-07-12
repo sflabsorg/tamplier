@@ -20,7 +20,7 @@ extension API.{{ uppercased_type }} {
         
         public var headers: [String : String] = [ "Content-Type" : "{{ content_type }}" ]
         public var type: QueryType { .{{ lowercased_type }} }
-        public var path: String { "{{ path }}\(QueryParameters([{{# gquery }}("{{ name }}", {{ name }}){{/ gquery }}]))" }
+        public var path: String { "{{ path }}\(QueryParameters([{{# gquery }}("{{ name }}", {{ name }}),{{/ gquery }}]))" }
         
         public init({{ init }}) {
             {{# parameters }}
