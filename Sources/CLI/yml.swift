@@ -176,6 +176,8 @@ extension API.YML.Property {
                 case "int32": return ("Int32", nil)
                 default: return ("Int", nil)
                 }
+            case "boolean":
+                return ("Bool", nil)
             case "number":
                 if self.enum != nil {
                     print("Enum's for type `number` not supported")
@@ -249,6 +251,8 @@ extension API.YML.Subproperty {
                 case "int32": return "Int32"
                 default: return "Int"
                 }
+            case "boolean":
+                return "Bool"
             case "number":
                 switch (format ?? "") {
                 case "Double": return "Double"
