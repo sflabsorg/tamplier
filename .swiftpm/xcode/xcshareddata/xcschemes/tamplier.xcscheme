@@ -52,7 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "api --path &apos;https://sflabs_system_account:7Dnq9cgStvj7M1v8SvOaZZ0O@t.face.cat/system/openapi&apos; --output ~/Developer/voicee-ios"
+            argument = "api --path &apos;https://sflabs_system_account:7Dnq9cgStvj7M1v8SvOaZZ0O@t.face.cat/system/openapi&apos; --output ~/Developer/feelfm-ios"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
