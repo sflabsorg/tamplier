@@ -146,8 +146,40 @@ extension API.YML {
         //
         
         try fileManager.createDirectory(at: outputURL.appendingPathComponent("Sources/Models"), withIntermediateDirectories: true, attributes: nil)
-        try components.schemas.forEach({ (name, schema) in
-            switch schema.type {
+        try components.schemas.map({ name, element -> (String, Schema) in
+            if let allOf = element.allOf {
+                let types = try allOf.compactMap({ property -> String in
+                    guard let _ = property.ref
+                    else {
+                        throw RuntimeError.message("Can't pare `alOf`")
+                    }
+                    
+                    let (_type, _) = property.expandedTypeWithSchema()
+                    guard let type = _type
+                    else {
+                        throw RuntimeError.message("Can't pare `alOf`")
+                    }
+                    
+                    return type
+                })
+                
+                let schemas = components.schemas.filter({ key, _ in
+                    return types.contains(key)
+                }).map({ _, schema in
+                    return schema
+                })
+                
+                return (name, Schema.combine(schemas))
+            } else {
+                return (name, element)
+            }
+        }).forEach({ (name, schema) in
+            guard let type = schema.type
+            else {
+                return
+            }
+            
+            switch type {
             case .object:
                 var enums: [[AnyHashable : Any]] = []
                 var properties = schema.properties?.compactMap({ (key, value) -> [String : Any]? in

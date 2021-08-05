@@ -30,11 +30,20 @@ extension API {
                 case string
             }
             
-            let type: SchemaType
-            let `enum`: [String]?
-            let description: String?
-            let required: [String]?
-            let properties: [String : Property]?
+            private(set) var allOf: [Property]?
+            private(set) var type: SchemaType?
+            private(set) var `enum`: [String]?
+            private(set) var description: String?
+            private(set) var required: [String]?
+            private(set) var properties: [String : Property]?
+            
+            static func combine(_ schemas: [Schema]) -> Schema {
+                var schema = Schema()
+                schema.type = .object
+                schema.required = schemas.compactMap({ $0.required }).reduce([String](), +)
+                schema.properties = schemas.compactMap({ $0.properties }).reduce([String : Property](), { $0._merge(dict: $1) })
+                return schema
+            }
         }
         
         struct Components: Codable, MustacheBoxable {
@@ -283,5 +292,16 @@ extension MustacheBoxable where Self: Encodable {
             return Box(nil)
         }
         return Box(json)
+    }
+}
+
+extension Dictionary {
+    
+    func _merge(dict: [Key : Value]) -> [Key : Value] {
+        var new: [Key : Value] = self
+        for (k, v) in dict {
+            new[k] = v
+        }
+        return new
     }
 }
