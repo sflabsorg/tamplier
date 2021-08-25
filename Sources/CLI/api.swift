@@ -10,21 +10,34 @@ import Mustache
 
 struct API: ParsableCommand {
     
+    struct Configuration: Decodable {
+        
+        let yml: String
+        let output: String
+    }
+    
     static var configuration = CommandConfiguration(
         commandName: "api",
         abstract: "Generates source files for Swagger backend which depends on Bootstrap API package."
     )
     
-    @Option(help: "Link to YML file with configuration.")
-    var path: String
-    
-    @Option(name: .customLong("output"), help: "Output directory of generated files")
-    var output: String
-    
     mutating func run() throws {
         let fileManager = FileManager.default
-        let cwd = fileManager.currentDirectoryPath
-    
+        let cwd = "/Users/oboupo/Developer/somesay-ios"//fileManager.currentDirectoryPath
+        
+        let configurationFilePath = cwd.appending("/Tamfile").standardizingPath()
+        let configurationFilePathURL = URL(fileURLWithPath: configurationFilePath)
+        guard fileManager.fileExists(atPath: configurationFilePath)
+        else {
+            throw RuntimeError.message("Can't locate file 'tamplier.json' file in current directory \(cwd)")
+        }
+        
+        let configurationFileData = try Data(contentsOf: configurationFilePathURL)
+        let configuration = try JSONDecoder().decode(Configuration.self, from: configurationFileData)
+        
+        let path = configuration.yml
+        let output = configuration.output
+        
         let contents = try path.contents()
         guard let dictionary = try load(yaml: contents)
         else {
@@ -46,7 +59,7 @@ struct API: ParsableCommand {
         let data = try JSONSerialization.data(withJSONObject: dictionary, options: .fragmentsAllowed)
         let yml = try JSONDecoder().decode(YML.self, from: data)
         
-        let outputPath = "\(output)/bootstrap-\(yml.info.title.lowercased())".standardizingPath()
+        let outputPath = "\(output)".standardizingPath()
         #if DEBUG
         #else
         if try !fileManager.isDirectoryEmpty(at: outputPath) {
@@ -64,7 +77,6 @@ struct API: ParsableCommand {
         try yml.render(templatesURL: templatesURL, outputURL: outputURL)
         
         try fileManager.removeItem(atPath: gitClonePath)
-        shell("open \(outputPath)")
     }
 }
 
