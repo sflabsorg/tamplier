@@ -22,10 +22,16 @@ tamplier
 
     tamplier generate --auth --output ~/Desktop --name AwesomeProject
     
-Генерация Swift Package с Swagger API по YML спецификации
-
+Генерация Swift Package с Swagger API по YML спецификации из Tamfile в директории проекта
+  
+    {
+      "yml": "", // Путь к YML схеме (локальный путь или ссылка)
+      "output": "", // Директория, в которой сгенерируется проект
+    }
+    
+  Выполните команду
+  
     tamplier api --path {path_to_yml_spec_file} --output ~/Desktop/AwesomeProject
-
 
 Разработка
 -----
