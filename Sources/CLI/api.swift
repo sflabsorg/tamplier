@@ -23,7 +23,7 @@ struct API: ParsableCommand {
     
     mutating func run() throws {
         let fileManager = FileManager.default
-        let cwd = "/Users/oboupo/Developer/somesay-ios"//fileManager.currentDirectoryPath
+        let cwd = fileManager.currentDirectoryPath
         
         let configurationFilePath = cwd.appending("/Tamfile").standardizingPath()
         let configurationFilePathURL = URL(fileURLWithPath: configurationFilePath)
