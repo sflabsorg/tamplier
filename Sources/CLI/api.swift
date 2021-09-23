@@ -122,7 +122,6 @@ extension API.YML {
             data: [
                 "title" : info.title,
                 "description": info.description,
-                "default" : servers.last?.url ?? "https://example.com",
                 "servers" : servers.mapIndex({ (_server, index) -> API.YML.Server in
                     var server = _server
                     if server.name == nil {
