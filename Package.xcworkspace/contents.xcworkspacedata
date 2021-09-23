@@ -17,9 +17,6 @@
          location = "group:Enum.swift">
       </FileRef>
       <FileRef
-         location = "group:Agent.swift">
-      </FileRef>
-      <FileRef
          location = "group:Server.swift">
       </FileRef>
       <FileRef

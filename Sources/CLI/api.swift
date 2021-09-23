@@ -133,26 +133,6 @@ extension API.YML {
         )
         
         //
-        // Agent.swift
-        //
-        
-        try render(
-            templatesURL: templatesURL.appendingPathComponent("Agent.swift"),
-            outputURL: outputURL.appendingPathComponent("Sources/Agent.swift"),
-            data: [
-                "title" : info.title,
-                "description": info.description,
-                "servers" : servers.mapIndex({ (_server, index) -> API.YML.Server in
-                    var server = _server
-                    if server.name == nil {
-                    server.name = "server\(index)"
-                    }
-                    return server
-                })
-            ]
-        )
-        
-        //
         // Models/
         //
         
