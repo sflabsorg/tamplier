@@ -8,8 +8,10 @@ import Foundation
 import BootstrapAPI
 
 {{# queries }}
-/// {{ path }}
-/// {{ description }}
+/**
+ {{ path }}
+ {{ description }}
+ */
 extension API.{{ uppercased_type }} {
 
     public struct {{ name }}: Query {

@@ -7,11 +7,12 @@
 import Foundation
 import BootstrapAPI
 
-///
-/// Default requests agent configuration
-///
-/// {{ title }}
-/// {{ description }}
+/**
+ Default requests agent configuration
+ 
+ {{ title }}
+ {{ description }}
+ */
 extension Agent {
     
     public static let `default`: Agent = {

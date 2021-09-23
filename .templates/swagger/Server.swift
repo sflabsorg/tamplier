@@ -7,11 +7,12 @@
 import Foundation
 import BootstrapAPI
 
-///
-/// Default servers configuration
-///
-/// {{ title }}
-/// {{ description }}
+/**
+ Default servers configuration
+ 
+ {{ title }}
+ {{ description }}
+ */
 extension Server {
 
     /// Server wich last in YML provided configuration

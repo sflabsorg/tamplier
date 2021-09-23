@@ -7,11 +7,12 @@
 import Foundation
 import BootstrapAPI
 
-///
-/// Default servers configuration
-///
-/// {{ name }}
-/// {{ description }}
+/**
+ Default servers configuration
+ 
+ {{ name }}
+ {{ description }}
+ */
 extension API {
     
     public enum {{ name }}: {{ type }}, Model {
