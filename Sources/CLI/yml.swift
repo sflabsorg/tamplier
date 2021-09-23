@@ -30,7 +30,19 @@ extension API {
                 case string
             }
             
+            enum CodingKeys: String, CodingKey {
+                
+                case allOf
+                case ref = "$ref"
+                case type
+                case `enum`
+                case description
+                case required
+                case properties
+            }
+            
             private(set) var allOf: [Property]?
+            private(set) var ref: String?
             private(set) var type: SchemaType?
             private(set) var `enum`: [String]?
             private(set) var description: String?
